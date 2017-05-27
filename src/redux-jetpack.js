@@ -5,7 +5,7 @@ import { connect as reduxConnect } from "react-redux";
 let store;
 
 export function createStore(initialState) {
-  const args = [].slice.call(arguments);
+  const args = [].slice.call(arguments).slice(1);
   store = reduxCreateStore.apply(
     undefined,
     [
@@ -53,5 +53,5 @@ export function connect(ActualComponent, mapStateToProps = state => state) {
   }
 
   const connector = reduxConnect(mapStateToProps);
-  return connector(ActualComponent);
+  return connector(Container);
 }

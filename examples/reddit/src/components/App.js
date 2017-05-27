@@ -4,11 +4,6 @@ import Picker from "./Picker";
 import Posts from "./Posts";
 import { connect } from "../redux-jetpack";
 
-const initialState = {
-  selectedReddit: "reactjs",
-  postsByReddit: {}
-};
-
 class App extends Component {
   componentDidMount() {
     fetchPostsIfNeeded(this.props.selectedReddit);
