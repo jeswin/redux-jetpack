@@ -1,0 +1,22 @@
+{
+  "name": "redux-jetpack",
+  "version": "0.0.1",
+  "author": "Jeswin<jeswinpk@agilehead.com>",
+  "main": "dist/redux-jetpack.js",
+  "dependencies": {
+    "react": "*",
+    "react-redux": "*"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-modern-browsers": "^7.0.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.22.0",
+    "source-map-support": "^0.4.8"
+  },
+  "license": "MIT"
+}
