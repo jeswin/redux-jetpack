@@ -11,8 +11,7 @@ export function createStore(initialState) {
     [
       reducer,
       initialState,
-      window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     ].concat(args)
   );
   return store;
@@ -43,7 +42,6 @@ export function replaceState(newState) {
     state: newState
   });
 }
-
 
 export function connect(ActualComponent, mapStateToProps = state => state) {
   class Container extends Component {
