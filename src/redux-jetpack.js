@@ -11,9 +11,9 @@ export function createStore(initialState) {
     [
       reducer,
       initialState,
-      typeof window === 'object' &&
-        window.__REDUX_DEVTOOLS_EXTENSION__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION__()
+      typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION__
+        ? window.__REDUX_DEVTOOLS_EXTENSION__()
+        : undefined
     ].concat(args)
   );
   return store;

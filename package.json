@@ -1,6 +1,6 @@
 {
   "name": "redux-jetpack",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Jeswin<jeswinpk@agilehead.com>",
   "main": "dist/redux-jetpack.js",
   "dependencies": {
