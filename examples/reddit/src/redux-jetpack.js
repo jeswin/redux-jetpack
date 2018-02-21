@@ -1,57 +1,61 @@
-import React, { Component } from "react";
-import { createStore as reduxCreateStore } from "redux";
-import { connect as reduxConnect } from "react-redux";
-
-let store;
-
-export function createStore(initialState) {
-  const args = [].slice.call(arguments).slice(1);
-  store = reduxCreateStore.apply(
-    undefined,
-    [
-      reducer,
-      initialState,
-      typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION__
-        ? window.__REDUX_DEVTOOLS_EXTENSION__()
-        : undefined
-    ].concat(args)
-  );
-  return store;
-}
-
-function reducer(state, action) {
-  return action && action.__replaceState ? action.state : state;
-}
-
-export function getState(selector) {
-  return selector ? selector(store.getState()) : store.getState();
-}
-
-export function updateState(property, update, actionType) {
-  const state = store.getState();
-  const newState = { ...state, [property]: update(state[property]) };
-  store.dispatch({
-    type: actionType || "REPLACE_STATE",
-    __replaceState: true,
-    state: newState
-  });
-}
-
-export function replaceState(newState) {
-  store.dispatch({
-    type: "REPLACE_STATE",
-    __replaceState: true,
-    state: newState
-  });
-}
-
-export function connect(ActualComponent, mapStateToProps = state => state) {
-  class Container extends Component {
-    render() {
-      return <ActualComponent {...this.props} />;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_1 = require("react");
+const redux_1 = require("redux");
+const react_redux_1 = require("react-redux");
+class JetPackStore {
+    constructor(reduxStore) {
+        this.reduxStore = reduxStore;
     }
-  }
-
-  const connector = reduxConnect(mapStateToProps);
-  return connector(Container);
+    getState() {
+        return this.reduxStore.getState();
+    }
+    getStateFragment(property) {
+        const state = this.reduxStore.getState();
+        return state[property];
+    }
+    updateState(property, updater, actionName) {
+        const state = this.reduxStore.getState();
+        const updatedState = Object.assign({}, state, { [property]: updater(state[property]) });
+        this.reduxStore.dispatch({
+            type: actionName,
+            state: updatedState,
+            __replaceState: true
+        });
+    }
+    replaceState(updatedState) {
+        this.reduxStore.dispatch({
+            type: "REPLACE_STATE",
+            state: updatedState,
+            __replaceState: true
+        });
+    }
 }
+exports.JetPackStore = JetPackStore;
+function reducer(state, action) {
+    return typeof action !== "undefined" && action.__replaceState
+        ? action.state
+        : state;
+}
+function createStore(initialState) {
+    const args = [].slice.call(arguments).slice(1);
+    const store = redux_1.createStore.apply(undefined, [
+        reducer,
+        initialState,
+        typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION__
+            ? window.__REDUX_DEVTOOLS_EXTENSION__()
+            : undefined
+    ].concat(args));
+    return new JetPackStore(store);
+}
+exports.createStore = createStore;
+function connect(ActualComponent, mapStateToProps) {
+    class Container extends react_1.Component {
+        render() {
+            return react_1.default.createElement(ActualComponent, Object.assign({}, this.props));
+        }
+    }
+    const connector = react_redux_1.connect(mapStateToProps);
+    return connector(Container);
+}
+exports.connect = connect;

@@ -10,7 +10,7 @@ const initialState = {
 };
 
 render(
-  <Provider store={createStore(initialState)}>
+  <Provider store={createStore(initialState).reduxStore}>
     <App />
   </Provider>,
   document.getElementById("root")
