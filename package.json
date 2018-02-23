@@ -1,8 +1,7 @@
 {
   "name": "redux-jetpack",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Jeswin<jeswinpk@agilehead.com>",
-  "main": "dist/redux-jetpack.js",
   "scripts": {
     "build": "./build.sh",
     "test": "mocha dist/test/test.js",

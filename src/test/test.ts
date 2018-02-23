@@ -1,6 +1,6 @@
 import "mocha";
 import "should";
-import * as jetpack from "../redux-jetpack";
+import * as jetpack from "../";
 
 const initialState = {
   networks: [
