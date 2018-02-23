@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import * as React from "react";
+import { Component } from "react";
 import { createStore as reduxCreateStore } from "redux";
 import { connect as reduxConnect, DispatchProp } from "react-redux";
 
