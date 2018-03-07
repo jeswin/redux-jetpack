@@ -1,6 +1,6 @@
 {
   "name": "redux-jetpack",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "author": "Jeswin<jeswinpk@agilehead.com>",
   "main": "./dist",
   "types": "./dist",
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
     "@types/mocha": "^2.2.48",
+    "@types/node": "^9.4.6",
     "@types/react-dom": "^15.5.7",
     "@types/should": "^13.0.0",
     "enzyme": "^3.3.0",

@@ -73,7 +73,7 @@ describe("redux-jetpack", async () => {
     });
   });
 
-  it("Connects state to a component", async () => {
+  it("Connects state to a pure component", async () => {
     const store = jetpack.createStore(initialState);
 
     const MyComponent = (props: {
@@ -87,6 +87,40 @@ describe("redux-jetpack", async () => {
         </h1>
       </div>
     );
+    const Wrapped = jetpack.connect(MyComponent, (state: State) => state.user);
+
+    const App = (
+      <Provider store={store.reduxStore}>
+        <Wrapped id={10} location="blr" />
+      </Provider>
+    );
+
+    const doc = mount(App) as any;
+    doc
+      .render()
+      .find("h1")
+      .should.have.text("Hello jeswin (blr, 10)");
+  });
+
+  it("Connects state to a classic component", async () => {
+    const store = jetpack.createStore(initialState);
+
+    class MyComponent extends React.Component<{
+      id: number;
+      location: string;
+      name: string;
+    }> {
+      render() {
+        return (
+          <div>
+            <h1>
+              Hello {this.props.name} ({this.props.location}, {this.props.id})
+            </h1>
+          </div>
+        );
+      }
+    }
+
     const Wrapped = jetpack.connect(MyComponent, (state: State) => state.user);
 
     const App = (
