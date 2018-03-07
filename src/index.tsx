@@ -100,17 +100,3 @@ export function connect<TActualComponentProps, TState, TStateFragment>(
   const connector = reduxConnect(mapStateToProps);
   return connector(Container) as any;
 }
-
-// export function connect<TComponentProps, TState, TStateFragment>(
-//   ActualComponent: React.ComponentClass<TComponentProps>,
-//   mapStateToProps: (state: TState) => TStateFragment
-// ): Component<Partial<TComponentProps>, {}> {
-//   class Container extends Component<Partial<TComponentProps>, any> {
-//     render() {
-//       return <ActualComponent {...this.props} />;
-//     }
-//   }
-
-//   const connector = reduxConnect(mapStateToProps);
-//   return connector(Container);
-// }
