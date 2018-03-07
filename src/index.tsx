@@ -85,24 +85,32 @@ export function createStore<TState>(initialState: TState) {
   return new JetPackStore<TState>(store);
 }
 
-export function connect<
-  TComponentProps extends TStateFragment,
-  TState,
-  TStateFragment
->(
+export function connect<TActualComponentProps, TState, TStateFragment>(
   ActualComponent:
-    | React.ComponentClass<TComponentProps>
-    | React.StatelessComponent<TComponentProps>,
+    | React.ComponentClass<TActualComponentProps>
+    | React.StatelessComponent<TActualComponentProps>,
   mapStateToProps: (state: TState) => TStateFragment
-):
-  | React.ComponentClass<TComponentProps>
-  | React.StatelessComponent<TComponentProps> {
-  class Container extends Component<TComponentProps> {
+): React.ComponentClass<Partial<TActualComponentProps>> {
+  class Container extends Component<any, any> {
     render() {
       return <ActualComponent {...this.props} />;
     }
   }
 
   const connector = reduxConnect(mapStateToProps);
-  return connector(Container as any);
+  return connector(Container) as any;
 }
+
+// export function connect<TComponentProps, TState, TStateFragment>(
+//   ActualComponent: React.ComponentClass<TComponentProps>,
+//   mapStateToProps: (state: TState) => TStateFragment
+// ): Component<Partial<TComponentProps>, {}> {
+//   class Container extends Component<Partial<TComponentProps>, any> {
+//     render() {
+//       return <ActualComponent {...this.props} />;
+//     }
+//   }
+
+//   const connector = reduxConnect(mapStateToProps);
+//   return connector(Container);
+// }
