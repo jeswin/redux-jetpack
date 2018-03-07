@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { createStore as reduxCreateStore } from "redux";
+import { createStore as reduxCreateStore, Store } from "redux";
 import { connect as reduxConnect, DispatchProp } from "react-redux";
 
 type PropertySelector<TState, TProperty> = (state: TState) => TProperty;
@@ -21,9 +21,9 @@ export interface ReplaceAction<TState extends State> {
 }
 
 export class JetPackStore<TState> {
-  reduxStore: ReduxStore<TState>;
+  reduxStore: Store<TState>;
 
-  constructor(reduxStore: ReduxStore<TState>) {
+  constructor(reduxStore: Store<TState>) {
     this.reduxStore = reduxStore;
   }
 
