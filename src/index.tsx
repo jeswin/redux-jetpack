@@ -85,8 +85,10 @@ export function createStore<TState>(initialState: TState) {
   return new JetPackStore<TState>(store);
 }
 
-export function connect<TState, TStateFragment>(
-  ActualComponent: React.ComponentClass,
+export function connect<TComponentProps, TState, TStateFragment>(
+  ActualComponent:
+    | React.ComponentClass<TComponentProps>
+    | React.StatelessComponent<TComponentProps>,
   mapStateToProps: (state: TState) => TStateFragment
 ) {
   class Container extends Component {
