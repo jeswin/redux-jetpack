@@ -1,6 +1,6 @@
 {
   "name": "redux-jetpack",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "author": "Jeswin<jeswinpk@agilehead.com>",
   "main": "./dist",
   "types": "./dist",
