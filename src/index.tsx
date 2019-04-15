@@ -1,46 +1,51 @@
 import * as React from "react";
 import { Component } from "react";
-import { createStore as reduxCreateStore, Store } from "redux";
+import {
+  createStore as reduxCreateStore,
+  Store,
+  StoreEnhancer,
+  AnyAction
+} from "redux";
 import { connect as reduxConnect, DispatchProp } from "react-redux";
 
-type PropertySelector<TState, TProperty> = (state: TState) => TProperty;
+type PropertySelector<TStoreState, TProperty> = (state: TStoreState) => TProperty;
 
 export interface State {
   [key: string]: any;
 }
 
-export interface ReduxStore<TState> {
-  getState(): TState;
-  dispatch(action: ReplaceAction<TState>): void;
+export interface ReduxStore<TStoreState> {
+  getState(): TStoreState;
+  dispatch(action: ReplaceAction<TStoreState>): void;
 }
 
-export interface ReplaceAction<TState extends State> {
+export interface ReplaceAction<TStoreState extends State> {
   type: string;
-  state: TState;
+  state: TStoreState;
   __replaceState: boolean;
 }
 
-export class JetPackStore<TState> {
-  reduxStore: Store<TState>;
+export class JetPackStore<TStoreState> {
+  reduxStore: Store<TStoreState>;
 
-  constructor(reduxStore: Store<TState>) {
+  constructor(reduxStore: Store<TStoreState>) {
     this.reduxStore = reduxStore;
   }
 
-  getState(): TState {
+  getState(): TStoreState {
     return this.reduxStore.getState();
   }
 
-  getStateFragment<PropertyKey extends keyof TState>(
+  getStateFragment<PropertyKey extends keyof TStoreState>(
     property: PropertyKey
-  ): TState[PropertyKey] {
+  ): TStoreState[PropertyKey] {
     const state = this.reduxStore.getState();
     return state[property];
   }
 
-  updateState<PropertyKey extends keyof TState>(
+  updateState<PropertyKey extends keyof TStoreState>(
     property: PropertyKey,
-    updater: (state: TState[PropertyKey]) => TState[PropertyKey],
+    updater: (state: TStoreState[PropertyKey]) => TStoreState[PropertyKey],
     actionName: string
   ) {
     const state = this.reduxStore.getState();
@@ -55,7 +60,7 @@ export class JetPackStore<TState> {
     });
   }
 
-  replaceState(updatedState: TState) {
+  replaceState(updatedState: TStoreState) {
     this.reduxStore.dispatch({
       type: "REPLACE_STATE",
       state: updatedState,
@@ -64,36 +69,43 @@ export class JetPackStore<TState> {
   }
 }
 
-function reducer<TState>(state: TState, action: ReplaceAction<TState>) {
-  return typeof action !== "undefined" && action.__replaceState
-    ? action.state
-    : state;
+export function createStore<TStoreState>(
+  initialState: TStoreState,
+  enhancer?: StoreEnhancer
+): JetPackStore<TStoreState> {
+  function reducer<TStoreState>(state: TStoreState, action: AnyAction) {
+    return typeof action !== "undefined" && action.__replaceState
+      ? action.state
+      : state;
+  }
+
+  const store: Store = reduxCreateStore.apply(undefined, [
+    reducer,
+    initialState,
+    enhancer
+  ]);
+
+  return new JetPackStore<TStoreState>(store);
 }
 
-export function createStore<TState>(initialState: TState) {
-  const args = [].slice.call(arguments).slice(1);
-  const store = reduxCreateStore.apply(
-    undefined,
-    [
-      reducer,
-      initialState,
-      typeof window === "object" && (window as any).__REDUX_DEVTOOLS_EXTENSION__
-        ? (window as any).__REDUX_DEVTOOLS_EXTENSION__()
-        : undefined
-    ].concat(args)
-  );
-  return new JetPackStore<TState>(store);
-}
+type Without<T, K> = Pick<T, Exclude<keyof T, K>>;
 
-export function connect<TActualComponentProps, TState, TStateFragment>(
+export function connect<
+  TActualComponentProps,
+  TActualComponentState,
+  TStoreState,
+  TApplicableState
+>(
   ActualComponent:
-    | React.ComponentClass<TActualComponentProps>
+    | React.ComponentClass<TActualComponentProps, TActualComponentState>
     | React.StatelessComponent<TActualComponentProps>,
-  mapStateToProps: (state: TState) => TStateFragment
-): React.ComponentClass<Partial<TActualComponentProps>> {
+  mapStateToProps: (state: TStoreState) => TApplicableState
+): React.ComponentClass<
+  Without<TActualComponentProps, keyof TApplicableState>
+> {
   class Container extends Component<any, any> {
     render() {
-      return <ActualComponent {...this.props} />;
+      return <ActualComponent {...this.props as any} />;
     }
   }
 
