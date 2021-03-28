@@ -1,7 +1,11 @@
 {
   "name": "redux-jetpack",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Jeswin<jeswinpk@agilehead.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeswin/redux-jetpack"
+  },
   "main": "./dist",
   "types": "./dist",
   "scripts": {
